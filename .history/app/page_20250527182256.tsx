@@ -331,7 +331,9 @@ export default function StockDashboard() {
             Cancel
           </Button>
           <Button
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              () => setIsOpen(false)
+            }}
             variant="contained"
             sx={{
               padding: '0.625rem 1.5rem',
@@ -350,7 +352,8 @@ export default function StockDashboard() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog open={isdeleteOpen} onClose={() => { setDeleteOpen(false) }} maxWidth="xs" fullWidth>
+      {/* modal for the delete */}
+      <Dialog open={isopen} onClose={() => { setIsOpen(false) }} maxWidth="xs" fullWidth>
         <DialogTitle
           sx={{
             display: 'flex',
@@ -362,9 +365,9 @@ export default function StockDashboard() {
             fontSize: '1.125rem'
           }}
         >
-          <span className="text-black text-md">Delete Word</span>
+          <span className="text-black text-md">Add Word</span>
           <IconButton
-            onClick={() => setDeleteOpen(false)}
+            onClick={() => setIsOpen(false)}
             sx={{ width: 32, height: 32 }}
           >
             <Image src="/images/cancel-01.svg" alt="Cancel" width={20} height={20} />

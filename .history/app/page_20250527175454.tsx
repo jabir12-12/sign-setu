@@ -7,12 +7,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import Image from 'next/image';
-import { IconButton } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import { Popover, PopoverTrigger, PopoverContent } from "@heroui/popover";
 
 export default function StockDashboard() {
   const [isopen, setIsOpen] = useState(false);
-  const [isdeleteOpen, setDeleteOpen] = useState(false);
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
       {/* Header */}
@@ -69,31 +68,37 @@ export default function StockDashboard() {
           {/* Example card */}
           <div className="relative bg-white rounded-xl shadow-md p-4 border border-gray-200 hover:shadow-lg transition duration-200">
             {/* 3 Dots Menu */}
-            <div className="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
-              <Popover placement="bottom-end">
+            <div className="absolute top-4 right-4 cursor-pointer text-gray-500 hover:text-gray-700">
+              <Popover
+                placement="bottom-end"
+              >
+
                 <PopoverTrigger>
                   <button
-                    className="flex items-center justify-center w-10 h-10 rounded-md bg-white hover:bg-[#F2F4F7] shadow-none focus:outline-none"
-                    aria-label="More options"
+                    className="w-10 p-[10px] h-[40px] gap-1 flex-row flex  bg-[#FFFFFF] rounded-lg  hover:bg-[#F2F4F7]
+                                     shadow-none"
+                    style={{ outline: "none" }}
                   >
                     <Image src="/images/three-dots.svg" width={18} height={18} alt="three-dots" />
                   </button>
                 </PopoverTrigger>
+                <PopoverContent className="flex flex-col px-0 text-sm font-normal bg-white rounded-md w-[167px] shadow-md"
+                >
 
-                <PopoverContent className="flex flex-col px-0 py-2 text-sm font-normal bg-white rounded-md w-[167px] shadow-md">
-                  <button className="flex items-center gap-2 px-4 py-2 hover:bg-[#F2F4F7] w-full text-left"
-                    onClick={() => setIsOpen(true)}>
-                    <Image src="/images/edit-icon.svg" width={18} height={18} alt="Edit" />
+                  <button className=" p-3 gap-2 flex-row flex h-[40px] hover:bg-[#F2F4F7] w-full">
+                    <Image src="/images/delete.svg" width={18} height={18} alt="Edit-quiz" />
                     <span className="text-sm text-[#0C111D] font-normal">Edit</span>
                   </button>
-                  <button className="flex items-center gap-2 px-4 py-2 hover:bg-[#FEE4E2] w-full text-left"
-                    onClick={() => setDeleteOpen(true)}>
-                    <Image src="/images/delete.svg" width={18} height={18} alt="Delete" />
+                  <button className=" p-3 gap-2 flex-row flex h-[40px] hover:bg-[#FEE4E2]  w-full"
+
+                  >
+                    <Image src="/images/edit-icon.svg" width={18} height={18} alt="delete-quiz" />
                     <span className="text-sm text-[#DE3024] font-normal">Delete</span>
                   </button>
                 </PopoverContent>
               </Popover>
             </div>
+
             <h3 className="text-xl font-semibold text-[#49243E] mb-2">Word: Hello</h3>
             <p className="text-gray-700 mb-2">Definition: A greeting or expression of goodwill.
               A greeting or expression of goodwill.
@@ -103,7 +108,7 @@ export default function StockDashboard() {
             <div className="mb-2">
               <span className="font-medium text-[#704264]">Image: </span>
               <a
-                href="https://source.unsplash.com/random/600x400"
+                href="https://example.com/image.jpg"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 underline"
@@ -115,7 +120,7 @@ export default function StockDashboard() {
             <div>
               <span className="font-medium text-[#704264]">Video: </span>
               <a
-                href="https://www.youtube.com/watch?v=S1l487Ev9g4"
+                href="https://example.com/video.mp4"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 underline"
@@ -126,31 +131,10 @@ export default function StockDashboard() {
           </div>
           <div className="relative bg-white rounded-xl shadow-md p-4 border border-gray-200 hover:shadow-lg transition duration-200">
             {/* 3 Dots Menu */}
-            <div className="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
-              <Popover placement="bottom-end">
-                <PopoverTrigger>
-                  <button
-                    className="flex items-center justify-center w-10 h-10 rounded-md bg-white hover:bg-[#F2F4F7] shadow-none focus:outline-none"
-                    aria-label="More options"
-                  >
-                    <Image src="/images/three-dots.svg" width={18} height={18} alt="three-dots" />
-                  </button>
-                </PopoverTrigger>
-
-                <PopoverContent className="flex flex-col px-0 py-2 text-sm font-normal bg-white rounded-md w-[167px] shadow-md">
-                  <button className="flex items-center gap-2 px-4 py-2 hover:bg-[#F2F4F7] w-full text-left"
-                    onClick={() => setIsOpen(true)}>
-                    <Image src="/images/edit-icon.svg" width={18} height={18} alt="Edit" />
-                    <span className="text-sm text-[#0C111D] font-normal">Edit</span>
-                  </button>
-                  <button className="flex items-center gap-2 px-4 py-2 hover:bg-[#FEE4E2] w-full text-left"
-                    onClick={() => setDeleteOpen(true)}>
-                    <Image src="/images/delete.svg" width={18} height={18} alt="Delete" />
-                    <span className="text-sm text-[#DE3024] font-normal">Delete</span>
-                  </button>
-                </PopoverContent>
-              </Popover>
+            <div className="absolute top-4 right-4 cursor-pointer text-gray-500 hover:text-gray-700">
+              <span className="text-2xl font-bold">⋮</span>
             </div>
+
             <h3 className="text-xl font-semibold text-[#49243E] mb-2">Word: Hello</h3>
             <p className="text-gray-700 mb-2">Definition: A greeting or expression of goodwill.
               A greeting or expression of goodwill.
@@ -160,7 +144,7 @@ export default function StockDashboard() {
             <div className="mb-2">
               <span className="font-medium text-[#704264]">Image: </span>
               <a
-                href="https://source.unsplash.com/random/600x400"
+                href="https://example.com/image.jpg"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 underline"
@@ -172,7 +156,7 @@ export default function StockDashboard() {
             <div>
               <span className="font-medium text-[#704264]">Video: </span>
               <a
-                href="https://www.youtube.com/watch?v=S1l487Ev9g4"
+                href="https://example.com/video.mp4"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 underline"
@@ -183,31 +167,10 @@ export default function StockDashboard() {
           </div>
           <div className="relative bg-white rounded-xl shadow-md p-4 border border-gray-200 hover:shadow-lg transition duration-200">
             {/* 3 Dots Menu */}
-            <div className="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
-              <Popover placement="bottom-end">
-                <PopoverTrigger>
-                  <button
-                    className="flex items-center justify-center w-10 h-10 rounded-md bg-white hover:bg-[#F2F4F7] shadow-none focus:outline-none"
-                    aria-label="More options"
-                  >
-                    <Image src="/images/three-dots.svg" width={18} height={18} alt="three-dots" />
-                  </button>
-                </PopoverTrigger>
-
-                <PopoverContent className="flex flex-col px-0 py-2 text-sm font-normal bg-white rounded-md w-[167px] shadow-md">
-                  <button className="flex items-center gap-2 px-4 py-2 hover:bg-[#F2F4F7] w-full text-left"
-                    onClick={() => setIsOpen(true)}>
-                    <Image src="/images/edit-icon.svg" width={18} height={18} alt="Edit" />
-                    <span className="text-sm text-[#0C111D] font-normal">Edit</span>
-                  </button>
-                  <button className="flex items-center gap-2 px-4 py-2 hover:bg-[#FEE4E2] w-full text-left"
-                    onClick={() => setDeleteOpen(true)}>
-                    <Image src="/images/delete.svg" width={18} height={18} alt="Delete" />
-                    <span className="text-sm text-[#DE3024] font-normal">Delete</span>
-                  </button>
-                </PopoverContent>
-              </Popover>
+            <div className="absolute top-4 right-4 cursor-pointer text-gray-500 hover:text-gray-700">
+              <span className="text-2xl font-bold">⋮</span>
             </div>
+
             <h3 className="text-xl font-semibold text-[#49243E] mb-2">Word: Hello</h3>
             <p className="text-gray-700 mb-2">Definition: A greeting or expression of goodwill.
               A greeting or expression of goodwill.
@@ -217,7 +180,7 @@ export default function StockDashboard() {
             <div className="mb-2">
               <span className="font-medium text-[#704264]">Image: </span>
               <a
-                href="https://source.unsplash.com/random/600x400"
+                href="https://example.com/image.jpg"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 underline"
@@ -229,7 +192,7 @@ export default function StockDashboard() {
             <div>
               <span className="font-medium text-[#704264]">Video: </span>
               <a
-                href="https://www.youtube.com/watch?v=S1l487Ev9g4"
+                href="https://example.com/video.mp4"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 underline"
@@ -238,10 +201,12 @@ export default function StockDashboard() {
               </a>
             </div>
           </div>
+
+          {/* You can map this design with dynamic data */}
         </div>
       </>
       {/* Add Words */}
-      <Dialog open={isopen} onClose={() => { setIsOpen(false) }} maxWidth="xs" fullWidth>
+      <Dialog open={isopen} onClose={() => setIsOpen(false)} maxWidth="xs" fullWidth>
         <DialogTitle
           sx={{
             display: 'flex',
@@ -331,7 +296,9 @@ export default function StockDashboard() {
             Cancel
           </Button>
           <Button
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              () => setIsOpen(false)
+            }}
             variant="contained"
             sx={{
               padding: '0.625rem 1.5rem',
@@ -350,85 +317,7 @@ export default function StockDashboard() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog open={isdeleteOpen} onClose={() => { setDeleteOpen(false) }} maxWidth="xs" fullWidth>
-        <DialogTitle
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '1rem 1.5rem',
-            color: '#1D2939',
-            fontWeight: 'bold',
-            fontSize: '1.125rem'
-          }}
-        >
-          <span className="text-black text-md">Delete Word</span>
-          <IconButton
-            onClick={() => setDeleteOpen(false)}
-            sx={{ width: 32, height: 32 }}
-          >
-            <Image src="/images/cancel-01.svg" alt="Cancel" width={20} height={20} />
-          </IconButton>
-        </DialogTitle>
 
-        {/* Body */}
-        <DialogContent sx={{ padding: '0 1.5rem 1.5rem' }}>
-          <span className="text-sm font-normal text-[#667085]">
-            Once the Word is deleted you cannot restore it again.
-          </span>
-        </DialogContent>
-
-        {/* Footer */}
-        <DialogActions
-          sx={{
-            padding: '1rem 1.5rem',
-            borderTop: '1px solid #EAECF0',
-            display: 'flex',
-            justifyContent: 'flex-end',
-            gap: 1.5
-          }}
-        >
-          <Button
-            onClick={() => setDeleteOpen(false)}
-            variant="outlined"
-            sx={{
-              padding: '0.625rem 1.5rem',
-              fontWeight: 600,
-              borderRadius: '8px',
-              fontSize: '0.875rem',
-              borderColor: '#EAECF0',
-              color: '#1D2939',
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: '#F2F4F7',
-                borderColor: '#EAECF0'
-              }
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={() => setDeleteOpen(false)}
-            variant="contained"
-            sx={{
-              padding: '0.625rem 1.5rem',
-              fontWeight: 600,
-              fontSize: '0.875rem',
-              borderRadius: '8px',
-              backgroundColor: '#BB241A',
-              color: 'white',
-              border: '1px solid #DE3024',
-              textTransform: 'none',
-              boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.05)',
-              '&:hover': {
-                backgroundColor: '#B0201A'
-              }
-            }}
-          >
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
     </div>
   );
 }

@@ -331,7 +331,9 @@ export default function StockDashboard() {
             Cancel
           </Button>
           <Button
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              () => setIsOpen(false)
+            }}
             variant="contained"
             sx={{
               padding: '0.625rem 1.5rem',
@@ -350,85 +352,28 @@ export default function StockDashboard() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog open={isdeleteOpen} onClose={() => { setDeleteOpen(false) }} maxWidth="xs" fullWidth>
-        <DialogTitle
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '1rem 1.5rem',
-            color: '#1D2939',
-            fontWeight: 'bold',
-            fontSize: '1.125rem'
-          }}
-        >
-          <span className="text-black text-md">Delete Word</span>
-          <IconButton
-            onClick={() => setDeleteOpen(false)}
-            sx={{ width: 32, height: 32 }}
-          >
-            <Image src="/images/cancel-01.svg" alt="Cancel" width={20} height={20} />
-          </IconButton>
-        </DialogTitle>
-
-        {/* Body */}
-        <DialogContent sx={{ padding: '0 1.5rem 1.5rem' }}>
-          <span className="text-sm font-normal text-[#667085]">
-            Once the Word is deleted you cannot restore it again.
-          </span>
+      {/* modal for the delete */}
+      <Dialog open={isdeleteOpen} onClose={() => setDeleteOpen(false)}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          Are you sure you want to delete this word? This action cannot be undone.
         </DialogContent>
-
-        {/* Footer */}
-        <DialogActions
-          sx={{
-            padding: '1rem 1.5rem',
-            borderTop: '1px solid #EAECF0',
-            display: 'flex',
-            justifyContent: 'flex-end',
-            gap: 1.5
-          }}
-        >
-          <Button
-            onClick={() => setDeleteOpen(false)}
-            variant="outlined"
-            sx={{
-              padding: '0.625rem 1.5rem',
-              fontWeight: 600,
-              borderRadius: '8px',
-              fontSize: '0.875rem',
-              borderColor: '#EAECF0',
-              color: '#1D2939',
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: '#F2F4F7',
-                borderColor: '#EAECF0'
-              }
-            }}
-          >
+        <DialogActions>
+          <Button onClick={() => setDeleteOpen(false)} color="primary">
             Cancel
           </Button>
           <Button
-            onClick={() => setDeleteOpen(false)}
-            variant="contained"
-            sx={{
-              padding: '0.625rem 1.5rem',
-              fontWeight: 600,
-              fontSize: '0.875rem',
-              borderRadius: '8px',
-              backgroundColor: '#BB241A',
-              color: 'white',
-              border: '1px solid #DE3024',
-              textTransform: 'none',
-              boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.05)',
-              '&:hover': {
-                backgroundColor: '#B0201A'
-              }
+            onClick={() => {
+              // handle actual delete logic here
+              setDeleteOpen(false);
             }}
+            color="error"
           >
             Delete
           </Button>
         </DialogActions>
       </Dialog>
+
     </div>
   );
 }

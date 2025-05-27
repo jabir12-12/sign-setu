@@ -241,7 +241,7 @@ export default function StockDashboard() {
         </div>
       </>
       {/* Add Words */}
-      <Dialog open={isopen} onClose={() => { setIsOpen(false) }} maxWidth="xs" fullWidth>
+      <Dialog open={isopen} onClose={() => setIsOpen(false)} maxWidth="xs" fullWidth>
         <DialogTitle
           sx={{
             display: 'flex',
@@ -331,7 +331,9 @@ export default function StockDashboard() {
             Cancel
           </Button>
           <Button
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              () => setIsOpen(false)
+            }}
             variant="contained"
             sx={{
               padding: '0.625rem 1.5rem',
@@ -350,7 +352,9 @@ export default function StockDashboard() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog open={isdeleteOpen} onClose={() => { setDeleteOpen(false) }} maxWidth="xs" fullWidth>
+      {/* modal for the delete */}
+      <Dialog open={isdeleteOpen} onClose={() => setDeleteOpen(false)} maxWidth="xs" fullWidth>
+        {/* Header */}
         <DialogTitle
           sx={{
             display: 'flex',
@@ -362,7 +366,7 @@ export default function StockDashboard() {
             fontSize: '1.125rem'
           }}
         >
-          <span className="text-black text-md">Delete Word</span>
+          <span>Delete Word?</span>
           <IconButton
             onClick={() => setDeleteOpen(false)}
             sx={{ width: 32, height: 32 }}

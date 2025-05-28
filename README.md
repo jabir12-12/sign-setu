@@ -2,19 +2,6 @@
 
 - **Start**
   
-  - ➤ **View Portfolio**
-    - Navigate to the **Portfolio Page**
-      - View KPIs for overall stock performance  
-      - View user's invested stocks  
-      - View stocks by category  
-        - View stock table for detailed information on each stock  
-
-  - ➤ **Click on User Profile**
-    - Navigate to the **User Details Page**  
-
-  - ➤ **Click the Refresh Button**
-    - Fetch the latest stock updates from Yahoo Finance  
-
   - ➤ **Search for Words**
     - Enter keyword into the **Search Bar**  
     - Filter results based on the word or its definition  

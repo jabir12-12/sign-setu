@@ -62,7 +62,16 @@ export default function StockDashboard() {
       console.log('✅ Success:', data);
 
       if (res.ok) {
-        // Optional: Reset modal and form state
+        const updatedWord = await res.json();
+
+        if (isEditing) {
+          setWords(prev =>
+            prev.map(w => (w._id === editWordId ? { ...w, ...updatedWord } : w))
+          );
+        } else {
+          setWords(prev => [...prev, updatedWord]);
+        }
+
         setIsOpen(false);
         setIsEditing(false);
         setEditWordId(null);
@@ -71,10 +80,9 @@ export default function StockDashboard() {
         setImageUrl('');
         setVideoUrl('');
 
-
-      } else {
-        console.error('Server error:', data);
+        toast.success(isEditing ? 'Word updated successfully!' : 'Word added successfully!');
       }
+
       toast.success(isEditing ? 'Word updated successfully!' : 'Word added successfully!');
     } catch (err) {
       console.error('❌ Error submitting form:', err);

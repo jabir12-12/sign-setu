@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import Image from 'next/image';
 import { IconButton } from '@mui/material';
 import { Popover, PopoverTrigger, PopoverContent } from "@heroui/popover";
-import { toast, ToastContainer } from 'react-toastify';
+
 interface Word {
   _id: string;
   word: string;
@@ -71,14 +71,13 @@ export default function StockDashboard() {
         setImageUrl('');
         setVideoUrl('');
 
-
+        // 🚀 Reload the entire page
+        window.location.reload();
       } else {
         console.error('Server error:', data);
       }
-      toast.success(isEditing ? 'Word updated successfully!' : 'Word added successfully!');
     } catch (err) {
       console.error('❌ Error submitting form:', err);
-      toast.error('Failed to submit the word. Please try again.');
     }
   };
 
@@ -92,7 +91,8 @@ export default function StockDashboard() {
         console.log('🗑️ Word deleted successfully');
         setDeleteOpen(false);
 
-
+        // Option 1: Reload the page
+        window.location.reload();
 
         // Option 2 (Recommended): Refetch words without reload
         // const updatedWords = words.filter(word => word._id !== id);
@@ -100,10 +100,8 @@ export default function StockDashboard() {
       } else {
         console.error('Failed to delete word');
       }
-      toast.success('Word deleted successfully!');
     } catch (err) {
       console.error('Error deleting word:', err);
-      toast.error('Failed to delete the word. Please try again.');
     }
   };
 
@@ -270,7 +268,7 @@ export default function StockDashboard() {
             ))
           )}
         </div>
-        <ToastContainer />
+
       </>
       {/* Add Words */}
       <Dialog open={isopen} onClose={() => {
@@ -485,7 +483,6 @@ export default function StockDashboard() {
           </Button>
         </DialogActions>
       </Dialog>
-
     </div>
   );
 }

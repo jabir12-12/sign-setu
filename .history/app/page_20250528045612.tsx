@@ -71,7 +71,8 @@ export default function StockDashboard() {
         setImageUrl('');
         setVideoUrl('');
 
-
+        // 🚀 Reload the entire page
+        window.location.reload();
       } else {
         console.error('Server error:', data);
       }

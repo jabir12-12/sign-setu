@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import Image from 'next/image';
 import { IconButton } from '@mui/material';
 import { Popover, PopoverTrigger, PopoverContent } from "@heroui/popover";
-import { toast, ToastContainer } from 'react-toastify';
+
 interface Word {
   _id: string;
   word: string;
@@ -28,7 +28,6 @@ export default function StockDashboard() {
   const [videoUrl, setVideoUrl] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [editWordId, setEditWordId] = useState<string | null>(null);
-  const [wordToDeleteId, setWordToDeleteId] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -61,52 +60,18 @@ export default function StockDashboard() {
       const data = await res.json();
       console.log('✅ Success:', data);
 
-      if (res.ok) {
-        // Optional: Reset modal and form state
-        setIsOpen(false);
-        setIsEditing(false);
-        setEditWordId(null);
-        setWord('');
-        setDefinition('');
-        setImageUrl('');
-        setVideoUrl('');
-
-
-      } else {
-        console.error('Server error:', data);
-      }
-      toast.success(isEditing ? 'Word updated successfully!' : 'Word added successfully!');
+      // Reset
+      setIsOpen(false);
+      setIsEditing(false);
+      setEditWordId(null);
+      setWord('');
+      setDefinition('');
+      setImageUrl('');
+      setVideoUrl('');
     } catch (err) {
       console.error('❌ Error submitting form:', err);
-      toast.error('Failed to submit the word. Please try again.');
     }
   };
-
-  const handleDelete = async (id: string) => {
-    try {
-      const res = await fetch(`/api/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (res.ok) {
-        console.log('🗑️ Word deleted successfully');
-        setDeleteOpen(false);
-
-
-
-        // Option 2 (Recommended): Refetch words without reload
-        // const updatedWords = words.filter(word => word._id !== id);
-        // setWords(updatedWords);
-      } else {
-        console.error('Failed to delete word');
-      }
-      toast.success('Word deleted successfully!');
-    } catch (err) {
-      console.error('Error deleting word:', err);
-      toast.error('Failed to delete the word. Please try again.');
-    }
-  };
-
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -220,11 +185,7 @@ export default function StockDashboard() {
                       </button>
                       <button
                         className="flex items-center gap-2 px-4 py-2 hover:bg-[#FEE4E2] w-full text-left"
-                        onClick={() => {
-                          setDeleteOpen(true);
-                          setWordToDeleteId(wordObj._id); // save ID for deletion
-                        }}
-
+                        onClick={() => setDeleteOpen(true)}
                       >
                         <Image
                           src="/images/delete.svg"
@@ -270,18 +231,10 @@ export default function StockDashboard() {
             ))
           )}
         </div>
-        <ToastContainer />
+
       </>
       {/* Add Words */}
-      <Dialog open={isopen} onClose={() => {
-        setIsOpen(false);
-        setIsEditing(false);
-        setEditWordId(null);
-        setWord('');
-        setDefinition('');
-        setImageUrl('');
-        setVideoUrl('');
-      }} maxWidth="xs" fullWidth>
+      <Dialog open={isopen} onClose={() => { setIsOpen(false) }} maxWidth="xs" fullWidth>
         <DialogTitle
           sx={{
             display: 'flex',
@@ -293,9 +246,7 @@ export default function StockDashboard() {
             fontSize: '1.125rem'
           }}
         >
-          <span className="text-black text-md">
-            {isEditing ? 'Edit Word' : 'Add Word'}
-          </span>
+          <span className="text-black text-md">Add Word</span>
           <IconButton
             onClick={() => setIsOpen(false)}
             sx={{ width: 32, height: 32 }}
@@ -461,10 +412,7 @@ export default function StockDashboard() {
             Cancel
           </Button>
           <Button
-            onClick={() => {
-              if (wordToDeleteId) handleDelete(wordToDeleteId);
-            }}
-
+            onClick={() => setDeleteOpen(false)}
             variant="contained"
             sx={{
               padding: '0.625rem 1.5rem',
@@ -485,7 +433,6 @@ export default function StockDashboard() {
           </Button>
         </DialogActions>
       </Dialog>
-
     </div>
   );
 }

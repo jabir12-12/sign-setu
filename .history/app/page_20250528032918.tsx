@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import Image from 'next/image';
 import { IconButton } from '@mui/material';
 import { Popover, PopoverTrigger, PopoverContent } from "@heroui/popover";
-import { toast, ToastContainer } from 'react-toastify';
+
 interface Word {
   _id: string;
   word: string;
@@ -26,9 +26,6 @@ export default function StockDashboard() {
   const [definition, setDefinition] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
-  const [isEditing, setIsEditing] = useState(false);
-  const [editWordId, setEditWordId] = useState<string | null>(null);
-  const [wordToDeleteId, setWordToDeleteId] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -47,11 +44,8 @@ export default function StockDashboard() {
 
   const handleSubmit = async () => {
     try {
-      const method = isEditing ? 'PUT' : 'POST';
-      const url = isEditing ? `/api/${editWordId}` : '/api/words';
-
-      const res = await fetch(url, {
-        method,
+      const res = await fetch('/api/words', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -59,63 +53,18 @@ export default function StockDashboard() {
       });
 
       const data = await res.json();
-      console.log('✅ Success:', data);
-
-      if (res.ok) {
-        // Optional: Reset modal and form state
-        setIsOpen(false);
-        setIsEditing(false);
-        setEditWordId(null);
-        setWord('');
-        setDefinition('');
-        setImageUrl('');
-        setVideoUrl('');
-
-
-      } else {
-        console.error('Server error:', data);
-      }
-      toast.success(isEditing ? 'Word updated successfully!' : 'Word added successfully!');
+      console.log('✅ Upload success:', data);
+      setIsOpen(false); // close modal
     } catch (err) {
-      console.error('❌ Error submitting form:', err);
-      toast.error('Failed to submit the word. Please try again.');
+      console.error('❌ Upload failed:', err);
     }
   };
-
-  const handleDelete = async (id: string) => {
-    try {
-      const res = await fetch(`/api/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (res.ok) {
-        console.log('🗑️ Word deleted successfully');
-        setDeleteOpen(false);
-
-
-
-        // Option 2 (Recommended): Refetch words without reload
-        // const updatedWords = words.filter(word => word._id !== id);
-        // setWords(updatedWords);
-      } else {
-        console.error('Failed to delete word');
-      }
-      toast.success('Word deleted successfully!');
-    } catch (err) {
-      console.error('Error deleting word:', err);
-      toast.error('Failed to delete the word. Please try again.');
-    }
-  };
-
-
   const [searchTerm, setSearchTerm] = useState("");
 
   // Filter words based on search term (case insensitive)
   const filteredWords = words.filter((wordObj) =>
-  (wordObj.word?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    wordObj.definition?.toLowerCase().includes(searchTerm.toLowerCase()))
+    wordObj.word.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
 
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
@@ -201,15 +150,8 @@ export default function StockDashboard() {
                     <PopoverContent className="flex flex-col px-0 py-2 text-sm font-normal bg-white rounded-md w-[167px] shadow-md">
                       <button
                         className="flex items-center gap-2 px-4 py-2 hover:bg-[#F2F4F7] w-full text-left"
-                        onClick={() => {
-                          setWord(wordObj.word);
-                          setDefinition(wordObj.definition);
-                          setImageUrl(wordObj.imageUrl);
-                          setVideoUrl(wordObj.videoUrl);
-                          setEditWordId(wordObj._id);     // Track the ID
-                          setIsEditing(true);             // Switch to PUT mode
-                          setIsOpen(true);                // Open modal
-                        }} >
+                        onClick={() => setIsOpen(true)}
+                      >
                         <Image
                           src="/images/edit-icon.svg"
                           width={18}
@@ -220,11 +162,7 @@ export default function StockDashboard() {
                       </button>
                       <button
                         className="flex items-center gap-2 px-4 py-2 hover:bg-[#FEE4E2] w-full text-left"
-                        onClick={() => {
-                          setDeleteOpen(true);
-                          setWordToDeleteId(wordObj._id); // save ID for deletion
-                        }}
-
+                        onClick={() => setDeleteOpen(true)}
                       >
                         <Image
                           src="/images/delete.svg"
@@ -270,18 +208,10 @@ export default function StockDashboard() {
             ))
           )}
         </div>
-        <ToastContainer />
+
       </>
       {/* Add Words */}
-      <Dialog open={isopen} onClose={() => {
-        setIsOpen(false);
-        setIsEditing(false);
-        setEditWordId(null);
-        setWord('');
-        setDefinition('');
-        setImageUrl('');
-        setVideoUrl('');
-      }} maxWidth="xs" fullWidth>
+      <Dialog open={isopen} onClose={() => { setIsOpen(false) }} maxWidth="xs" fullWidth>
         <DialogTitle
           sx={{
             display: 'flex',
@@ -293,9 +223,7 @@ export default function StockDashboard() {
             fontSize: '1.125rem'
           }}
         >
-          <span className="text-black text-md">
-            {isEditing ? 'Edit Word' : 'Add Word'}
-          </span>
+          <span className="text-black text-md">Add Word</span>
           <IconButton
             onClick={() => setIsOpen(false)}
             sx={{ width: 32, height: 32 }}
@@ -461,10 +389,7 @@ export default function StockDashboard() {
             Cancel
           </Button>
           <Button
-            onClick={() => {
-              if (wordToDeleteId) handleDelete(wordToDeleteId);
-            }}
-
+            onClick={() => setDeleteOpen(false)}
             variant="contained"
             sx={{
               padding: '0.625rem 1.5rem',
@@ -485,7 +410,6 @@ export default function StockDashboard() {
           </Button>
         </DialogActions>
       </Dialog>
-
     </div>
   );
 }

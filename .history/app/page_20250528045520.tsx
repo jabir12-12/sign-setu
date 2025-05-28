@@ -71,7 +71,8 @@ export default function StockDashboard() {
         setImageUrl('');
         setVideoUrl('');
 
-
+        // 🚀 Reload the entire page
+        window.location.reload();
       } else {
         console.error('Server error:', data);
       }
@@ -92,7 +93,8 @@ export default function StockDashboard() {
         console.log('🗑️ Word deleted successfully');
         setDeleteOpen(false);
 
-
+        // Option 1: Reload the page
+        window.location.reload();
 
         // Option 2 (Recommended): Refetch words without reload
         // const updatedWords = words.filter(word => word._id !== id);

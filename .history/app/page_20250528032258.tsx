@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import Image from 'next/image';
 import { IconButton } from '@mui/material';
 import { Popover, PopoverTrigger, PopoverContent } from "@heroui/popover";
-import { toast, ToastContainer } from 'react-toastify';
+
 interface Word {
   _id: string;
   word: string;
@@ -26,9 +26,6 @@ export default function StockDashboard() {
   const [definition, setDefinition] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
-  const [isEditing, setIsEditing] = useState(false);
-  const [editWordId, setEditWordId] = useState<string | null>(null);
-  const [wordToDeleteId, setWordToDeleteId] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -47,11 +44,8 @@ export default function StockDashboard() {
 
   const handleSubmit = async () => {
     try {
-      const method = isEditing ? 'PUT' : 'POST';
-      const url = isEditing ? `/api/${editWordId}` : '/api/words';
-
-      const res = await fetch(url, {
-        method,
+      const res = await fetch('/api/words', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -59,64 +53,12 @@ export default function StockDashboard() {
       });
 
       const data = await res.json();
-      console.log('✅ Success:', data);
-
-      if (res.ok) {
-        // Optional: Reset modal and form state
-        setIsOpen(false);
-        setIsEditing(false);
-        setEditWordId(null);
-        setWord('');
-        setDefinition('');
-        setImageUrl('');
-        setVideoUrl('');
-
-
-      } else {
-        console.error('Server error:', data);
-      }
-      toast.success(isEditing ? 'Word updated successfully!' : 'Word added successfully!');
+      console.log('✅ Upload success:', data);
+      setIsOpen(false); // close modal
     } catch (err) {
-      console.error('❌ Error submitting form:', err);
-      toast.error('Failed to submit the word. Please try again.');
+      console.error('❌ Upload failed:', err);
     }
   };
-
-  const handleDelete = async (id: string) => {
-    try {
-      const res = await fetch(`/api/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (res.ok) {
-        console.log('🗑️ Word deleted successfully');
-        setDeleteOpen(false);
-
-
-
-        // Option 2 (Recommended): Refetch words without reload
-        // const updatedWords = words.filter(word => word._id !== id);
-        // setWords(updatedWords);
-      } else {
-        console.error('Failed to delete word');
-      }
-      toast.success('Word deleted successfully!');
-    } catch (err) {
-      console.error('Error deleting word:', err);
-      toast.error('Failed to delete the word. Please try again.');
-    }
-  };
-
-
-  const [searchTerm, setSearchTerm] = useState("");
-
-  // Filter words based on search term (case insensitive)
-  const filteredWords = words.filter((wordObj) =>
-  (wordObj.word?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    wordObj.definition?.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
-
-
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
       {/* Header */}
@@ -164,23 +106,16 @@ export default function StockDashboard() {
               type="text"
               placeholder="Search words or definitions..."
               className="w-full pl-12 pr-5 py-3 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#BB8493] focus:border-[#BB8493] hover:border-gray-400 transition-all duration-200"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
 
-
         {/* Display Section */}
-        <div className="my-10 px-4 max-w-3xl mx-auto space-y-6">
-          {filteredWords.length === 0 ? (
-            <p className="text-center text-gray-500 text-lg">No such word is found</p>
-          ) : (
-            filteredWords.map((wordObj) => (
-              <div
-                key={wordObj._id}
-                className="relative bg-white rounded-xl shadow-md p-4 border border-gray-200 hover:shadow-lg transition duration-200"
-              >
+        <div className="my-10 px-4 max-w-3xl mx-auto space-y-6 flex flex-wrap justify-center gap-6">
+          {/* Example card */}
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {words.map((wordObj) => (
+              <div key={wordObj._id} className="relative bg-white rounded-xl shadow-md p-4 border border-gray-200 hover:shadow-lg transition duration-200">
                 {/* 3 Dots Menu */}
                 <div className="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
                   <Popover placement="bottom-end">
@@ -189,64 +124,30 @@ export default function StockDashboard() {
                         className="flex items-center justify-center w-10 h-10 rounded-md bg-white hover:bg-[#F2F4F7] shadow-none focus:outline-none"
                         aria-label="More options"
                       >
-                        <Image
-                          src="/images/three-dots.svg"
-                          width={18}
-                          height={18}
-                          alt="three-dots"
-                        />
+                        <Image src="/images/three-dots.svg" width={18} height={18} alt="three-dots" />
                       </button>
                     </PopoverTrigger>
 
                     <PopoverContent className="flex flex-col px-0 py-2 text-sm font-normal bg-white rounded-md w-[167px] shadow-md">
-                      <button
-                        className="flex items-center gap-2 px-4 py-2 hover:bg-[#F2F4F7] w-full text-left"
-                        onClick={() => {
-                          setWord(wordObj.word);
-                          setDefinition(wordObj.definition);
-                          setImageUrl(wordObj.imageUrl);
-                          setVideoUrl(wordObj.videoUrl);
-                          setEditWordId(wordObj._id);     // Track the ID
-                          setIsEditing(true);             // Switch to PUT mode
-                          setIsOpen(true);                // Open modal
-                        }} >
-                        <Image
-                          src="/images/edit-icon.svg"
-                          width={18}
-                          height={18}
-                          alt="Edit"
-                        />
+                      <button className="flex items-center gap-2 px-4 py-2 hover:bg-[#F2F4F7] w-full text-left"
+                        onClick={() => setIsOpen(true)}>
+                        <Image src="/images/edit-icon.svg" width={18} height={18} alt="Edit" />
                         <span className="text-sm text-[#0C111D] font-normal">Edit</span>
                       </button>
-                      <button
-                        className="flex items-center gap-2 px-4 py-2 hover:bg-[#FEE4E2] w-full text-left"
-                        onClick={() => {
-                          setDeleteOpen(true);
-                          setWordToDeleteId(wordObj._id); // save ID for deletion
-                        }}
-
-                      >
-                        <Image
-                          src="/images/delete.svg"
-                          width={18}
-                          height={18}
-                          alt="Delete"
-                        />
+                      <button className="flex items-center gap-2 px-4 py-2 hover:bg-[#FEE4E2] w-full text-left"
+                        onClick={() => setDeleteOpen(true)}>
+                        <Image src="/images/delete.svg" width={18} height={18} alt="Delete" />
                         <span className="text-sm text-[#DE3024] font-normal">Delete</span>
                       </button>
                     </PopoverContent>
                   </Popover>
                 </div>
-
-                <h3 className="text-xl font-semibold text-[#49243E] mb-2">
-                  Word: {wordObj.word}
-                </h3>
+                <h3 className="text-xl font-semibold text-[#49243E] mb-2">Word:{wordObj.word}</h3>
                 <p className="text-gray-700 mb-2">Definition: {wordObj.definition}</p>
 
                 <div className="mb-2">
                   <span className="font-medium text-[#704264]">Image: </span>
-                  <a
-                    href={wordObj.imageUrl}
+                  <a href={wordObj.imageUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 underline"
@@ -257,8 +158,7 @@ export default function StockDashboard() {
 
                 <div>
                   <span className="font-medium text-[#704264]">Video: </span>
-                  <a
-                    href={wordObj.videoUrl}
+                  <a href={wordObj.videoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 underline"
@@ -267,21 +167,12 @@ export default function StockDashboard() {
                   </a>
                 </div>
               </div>
-            ))
-          )}
+            ))}
+          </div>
         </div>
-        <ToastContainer />
       </>
       {/* Add Words */}
-      <Dialog open={isopen} onClose={() => {
-        setIsOpen(false);
-        setIsEditing(false);
-        setEditWordId(null);
-        setWord('');
-        setDefinition('');
-        setImageUrl('');
-        setVideoUrl('');
-      }} maxWidth="xs" fullWidth>
+      <Dialog open={isopen} onClose={() => { setIsOpen(false) }} maxWidth="xs" fullWidth>
         <DialogTitle
           sx={{
             display: 'flex',
@@ -293,9 +184,7 @@ export default function StockDashboard() {
             fontSize: '1.125rem'
           }}
         >
-          <span className="text-black text-md">
-            {isEditing ? 'Edit Word' : 'Add Word'}
-          </span>
+          <span className="text-black text-md">Add Word</span>
           <IconButton
             onClick={() => setIsOpen(false)}
             sx={{ width: 32, height: 32 }}
@@ -461,10 +350,7 @@ export default function StockDashboard() {
             Cancel
           </Button>
           <Button
-            onClick={() => {
-              if (wordToDeleteId) handleDelete(wordToDeleteId);
-            }}
-
+            onClick={() => setDeleteOpen(false)}
             variant="contained"
             sx={{
               padding: '0.625rem 1.5rem',
@@ -485,7 +371,6 @@ export default function StockDashboard() {
           </Button>
         </DialogActions>
       </Dialog>
-
     </div>
   );
 }

@@ -13,10 +13,14 @@
     "@emotion/styled": "^11.14.0",
     "@heroui/popover": "^2.3.19",
     "@mui/material": "^7.1.0",
+    "@types/dotenv": "^6.1.1",
+    "dotenv": "^16.5.0",
     "lucide-react": "^0.511.0",
+    "mongoose": "^8.15.1",
     "next": "15.3.2",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-toastify": "^11.0.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -27,6 +31,6 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "5.8.3"
   }
 }

@@ -3,15 +3,13 @@ import mongoose from "mongoose";
 import { connectionString } from "@/lib/database/db-connection";
 import { words } from "@/lib/database/models/word";
 
-interface RouteContext {
-    params: Promise<{ wordid: string }>;
-}
+// Remove the RouteContext import
 
 export const GET = async (
     _req: NextRequest,
-    context: RouteContext
+    context: { params: { wordid: string } }
 ) => {
-    const { wordid } = await context.params;
+    const wordid = context.params.wordid;
     await mongoose.connect(connectionString);
     const result = await words.findById({ _id: wordid });
     return NextResponse.json({ result });
@@ -19,9 +17,9 @@ export const GET = async (
 
 export const PUT = async (
     req: NextRequest,
-    context: RouteContext
+    context: { params: { wordid: string } }
 ) => {
-    const { wordid } = await context.params;
+    const wordid = context.params.wordid;
     const payload = await req.json();
     await mongoose.connect(connectionString);
     const result = await words.findOneAndUpdate({ _id: wordid }, payload);
@@ -30,9 +28,9 @@ export const PUT = async (
 
 export const DELETE = async (
     _req: NextRequest,
-    context: RouteContext
+    context: { params: { wordid: string } }
 ) => {
-    const { wordid } = await context.params;
+    const wordid = context.params.wordid;
     await mongoose.connect(connectionString);
     const result = await words.deleteOne({ _id: wordid });
     return NextResponse.json({ result });

@@ -3,37 +3,30 @@ import mongoose from "mongoose";
 import { connectionString } from "@/lib/database/db-connection";
 import { words } from "@/lib/database/models/word";
 
-interface RouteContext {
-    params: Promise<{ wordid: string }>;
+export async function GET(
+    _req: NextRequest,
+    { params }: string | any) {
+    const wordid = params.wordid;
+    await mongoose.connect(connectionString);
+    const result = await words.findById(wordid);
+    return NextResponse.json({ result });
 }
 
-export const GET = async (
-    _req: NextRequest,
-    context: RouteContext
-) => {
-    const { wordid } = await context.params;
-    await mongoose.connect(connectionString);
-    const result = await words.findById({ _id: wordid });
-    return NextResponse.json({ result });
-};
-
-export const PUT = async (
+export async function PUT(
     req: NextRequest,
-    context: RouteContext
-) => {
-    const { wordid } = await context.params;
+    { params }: string | any) {
+    const wordid = params.wordid;
     const payload = await req.json();
     await mongoose.connect(connectionString);
     const result = await words.findOneAndUpdate({ _id: wordid }, payload);
     return NextResponse.json({ result });
-};
+}
 
-export const DELETE = async (
+export async function DELETE(
     _req: NextRequest,
-    context: RouteContext
-) => {
-    const { wordid } = await context.params;
+    { params }: string | any) {
+    const wordid = params.wordid;
     await mongoose.connect(connectionString);
     const result = await words.deleteOne({ _id: wordid });
     return NextResponse.json({ result });
-};
+}
